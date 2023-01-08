@@ -5,13 +5,11 @@ Since version 5 of this library, the axes and simulation controls have configura
 The decision was made to set defaults to 0 for minimum and 32767 for maximum (previously -32767 to 32767)
 This was due to the fact that non-Windows operating systems and some online web-based game controller testers didn't play well with negative numbers. Existing sketches should take note, and see the DrivingControllerTest example for how to set back to -32767 if wanted
 
-This version of the library has been tested against NimBLE-Arduino version 1.4.1; the latest released version --> https://github.com/h2zero/NimBLE-Arduino/releases/tag/1.4.1
-
 Please see updated examples
 
 ## NimBLE
 Since version 3 of this library, the more efficient NimBLE library is used instead of the default BLE implementation
-Please use the library manager to install it, or get it from here: https://github.com/h2zero/NimBLE-Arduino
+Please get it from here: https://github.com/h2zero/esp-nimble-cpp
 Since version 3, this library also supports a configurable HID desciptor, which allows users to customise how the device presents itself to the OS (number of buttons, hats, axes, sliders, simulation controls etc).
 See the examples for guidance.
 
@@ -42,13 +40,6 @@ It would be great however if any improvements are fed back into this version.
  - [x] Compatible with MacOS X (limited testing)
  - [ ] Compatible with iOS (No - not even for accessibility switch - This is not a “Made for iPhone” (MFI) compatible device)
 
-## Installation
-- (Make sure you can use the ESP32 with the Arduino IDE. [Instructions can be found here.](https://github.com/espressif/arduino-esp32#installation-instructions))
-- [Download the latest release of this library from the release page.](https://github.com/lemmingDev/ESP32-BLE-Gamepad/releases)
-- In the Arduino IDE go to "Sketch" -> "Include Library" -> "Add .ZIP Library..." and select the file you just downloaded.
-- In the Arduino IDE go to "Tools" -> "Manage Libraries..." -> Filter for "NimBLE-Arduino" by h2zero and install.
-- You can now go to "File" -> "Examples" -> "ESP32 BLE Gamepad" and select an example to get started.
-
 ## Example
 
 ``` C++
@@ -76,20 +67,24 @@ It would be great however if any improvements are fed back into this version.
  * start and select are enabled by default
  */
 
-#include <Arduino.h>
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
 #include <BleGamepad.h>
 
 BleGamepad bleGamepad;
 
-void setup()
+TaskHandle_t loopTaskHandle = NULL;
+void main()
 {
     Serial.begin(115200);
     Serial.println("Starting BLE work!");
     bleGamepad.begin();
     // The default bleGamepad.begin() above enables 16 buttons, all axes, one hat, and no simulation controls or special buttons
+    xTaskCreatePinnedToCore(app_loop, "APP_LOOP", 4096, NULL, tskIDLE_PRIORITY, &loopTaskHandle, 1);
+    configASSERT(loopTaskHandle);
 }
 
-void loop()
+void app_loop()
 {
     if (bleGamepad.isConnected())
     {
@@ -134,7 +129,7 @@ Credits to [wakwak-koba](https://github.com/wakwak-koba) for the NimBLE [code](h
 
 ## Notes
 This library allows you to make the ESP32 act as a Bluetooth Gamepad and control what it does.  
-Relies on [NimBLE-Arduino](https://github.com/h2zero/NimBLE-Arduino)
+Relies on [ESP-NimBLE](https://github.com/h2zero/esp-nimble-cpp)
 
 Use [this](http://www.planetpointy.co.uk/joystick-test-application/) Windows test app to test/see all of the buttons
 

@@ -72,6 +72,15 @@ BleGamepad::BleGamepad(std::string deviceName, std::string deviceManufacturer, u
     this->connectionStatus = new BleConnectionStatus();
 }
 
+uint8_t lowByte(uint16_t input)
+{
+    return input & 0xff;
+}
+uint8_t highByte(uint16_t input)
+{
+    return (input>>8) & 0xff;
+}
+
 void BleGamepad::resetButtons()
 {
     memset(&_buttons, 0, sizeof(_buttons));
