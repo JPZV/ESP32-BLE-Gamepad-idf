@@ -799,7 +799,7 @@ void BleGamepad::sendReport(void)
         }
 
         this->inputGamepad->setValue(m, sizeof(m));
-        this->inputGamepad->notify(true, this->inputGamepad->getHandle());
+        this->inputGamepad->notify();
     }
 }
 
