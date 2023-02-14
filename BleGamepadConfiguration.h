@@ -221,6 +221,7 @@ private:
     char *_serialNumber;
     char *_firmwareRevision;
     char *_hardwareRevision;
+    bool _hasRumble;
 
 public:
     BleGamepadConfiguration();
@@ -270,6 +271,7 @@ public:
     char *getSerialNumber();
     char *getFirmwareRevision();
     char *getHardwareRevision();
+    bool getHasRumble();
 
     void setControllerType(uint8_t controllerType);
     void setAutoReport(bool value);
@@ -311,6 +313,7 @@ public:
     void setSerialNumber(char *value);
     void setFirmwareRevision(char *value);
     void setHardwareRevision(char *value);
+    void setHasRumble(bool value);
 };
 
 #endif

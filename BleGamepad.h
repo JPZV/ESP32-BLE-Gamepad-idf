@@ -7,6 +7,7 @@
 #if defined(CONFIG_BT_NIMBLE_ROLE_PERIPHERAL)
 
 #include "BleConnectionStatus.h"
+#include "BleGamepadOutput.h"
 #include "NimBLEHIDDevice.h"
 #include "NimBLECharacteristic.h"
 #include "BleGamepadConfiguration.h"
@@ -37,9 +38,11 @@ private:
     BleGamepadConfiguration configuration;
 
     BleConnectionStatus *connectionStatus;
+    BleGamepadOutput *outputCallBack;
 
     NimBLEHIDDevice *hid;
     NimBLECharacteristic *inputGamepad;
+    NimBLECharacteristic *outputGamepad;
 
     void rawAction(uint8_t msg[], char msgSize);
     static void taskServer(void *pvParameter);
@@ -102,6 +105,7 @@ public:
     bool isConnected(void);
     void resetButtons();
     void setBatteryLevel(uint8_t level);
+    void setRumbleCallBack(void (*func)(RumbleData*));
     uint8_t batteryLevel;
     std::string deviceManufacturer;
     std::string deviceName;
