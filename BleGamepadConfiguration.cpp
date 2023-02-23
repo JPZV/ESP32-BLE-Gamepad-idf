@@ -19,7 +19,8 @@ BleGamepadConfiguration::BleGamepadConfiguration() : _controllerType(CONTROLLER_
                                                      _serialNumber("0123456789"),
                                                      _firmwareRevision("0.5.2"),
                                                      _hardwareRevision("1.0.0"),
-                                                     _hasRumble(false)
+                                                     _hasRumble(false),
+                                                     _rumbleCallBack(NULL)
 {
 }
 
@@ -119,6 +120,7 @@ char *BleGamepadConfiguration::getSerialNumber(){ return _serialNumber; }
 char *BleGamepadConfiguration::getFirmwareRevision(){ return _firmwareRevision; }
 char *BleGamepadConfiguration::getHardwareRevision(){ return _hardwareRevision; }
 bool BleGamepadConfiguration::getHasRumble() { return _hasRumble; }
+RumbleCallBackFunc BleGamepadConfiguration::getRumbleCallBack() { return _rumbleCallBack; }
 
 void BleGamepadConfiguration::setWhichSpecialButtons(bool start, bool select, bool menu, bool home, bool back, bool volumeInc, bool volumeDec, bool volumeMute)
 {
@@ -191,3 +193,4 @@ void BleGamepadConfiguration::setSerialNumber(char *value) { _serialNumber = val
 void BleGamepadConfiguration::setFirmwareRevision(char *value) { _firmwareRevision = value; }
 void BleGamepadConfiguration::setHardwareRevision(char *value) { _hardwareRevision = value; }
 void BleGamepadConfiguration::setHasRumble(bool value) { _hasRumble = value; }
+void BleGamepadConfiguration::setRumbleCallBack(void (*value)(RumbleData*)) { _rumbleCallBack = value; }

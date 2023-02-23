@@ -105,7 +105,6 @@ public:
     bool isConnected(void);
     void resetButtons();
     void setBatteryLevel(uint8_t level);
-    void setRumbleCallBack(void (*func)(RumbleData*));
     uint8_t batteryLevel;
     std::string deviceManufacturer;
     std::string deviceName;

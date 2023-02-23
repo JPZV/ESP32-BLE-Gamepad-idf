@@ -575,75 +575,36 @@ void BleGamepad::begin(BleGamepadConfiguration *config)
         tempHidReportDescriptor[hidReportDescriptorSize++] = 0x05;
         tempHidReportDescriptor[hidReportDescriptorSize++] = 0x0F;
 
-        // USAGE (PID Device Control Report)
-        tempHidReportDescriptor[hidReportDescriptorSize++] = 0x09;
-        tempHidReportDescriptor[hidReportDescriptorSize++] = 0x95;
-
-        // COLLECTION (Logical)
-        tempHidReportDescriptor[hidReportDescriptorSize++] = 0xA1;
-        tempHidReportDescriptor[hidReportDescriptorSize++] = 0x02;
-
         // REPORT_ID (Default: 11)
         tempHidReportDescriptor[hidReportDescriptorSize++] = 0x85;
         tempHidReportDescriptor[hidReportDescriptorSize++] = configuration.getHidReportId() + 1;
-
-        // USAGE (PID Device Control)
-        tempHidReportDescriptor[hidReportDescriptorSize++] = 0x09;
-        tempHidReportDescriptor[hidReportDescriptorSize++] = 0x96;
-
-        // COLLECTION (Logical)
-        tempHidReportDescriptor[hidReportDescriptorSize++] = 0xA1;
-        tempHidReportDescriptor[hidReportDescriptorSize++] = 0x02;
 
         // USAGE (DC Enable Actuators)
         tempHidReportDescriptor[hidReportDescriptorSize++] = 0x09;
         tempHidReportDescriptor[hidReportDescriptorSize++] = 0x97;
 
-        // USAGE (DC Disable Actuators)
-        tempHidReportDescriptor[hidReportDescriptorSize++] = 0x09;
-        tempHidReportDescriptor[hidReportDescriptorSize++] = 0x98;
-
-        // USAGE (DC Stop All Effects)
-        tempHidReportDescriptor[hidReportDescriptorSize++] = 0x09;
-        tempHidReportDescriptor[hidReportDescriptorSize++] = 0x99;
-
-        // USAGE (DC Device Reset)
-        tempHidReportDescriptor[hidReportDescriptorSize++] = 0x09;
-        tempHidReportDescriptor[hidReportDescriptorSize++] = 0x9A;
-
-        // USAGE (DC Device Pause)
-        tempHidReportDescriptor[hidReportDescriptorSize++] = 0x09;
-        tempHidReportDescriptor[hidReportDescriptorSize++] = 0x9B;
-
-        // USAGE (DC Device Continue)
-        tempHidReportDescriptor[hidReportDescriptorSize++] = 0x09;
-        tempHidReportDescriptor[hidReportDescriptorSize++] = 0x9C;
-
-        // LOGICAL_MINIMUM (1)
+        // LOGICAL_MINIMUM (0)
         tempHidReportDescriptor[hidReportDescriptorSize++] = 0x15;
-        tempHidReportDescriptor[hidReportDescriptorSize++] = 0x01;
+        tempHidReportDescriptor[hidReportDescriptorSize++] = 0x00;
 
-        // LOGICAL_MAXIMUM (6)
-        tempHidReportDescriptor[hidReportDescriptorSize++] = 0x25;
-        tempHidReportDescriptor[hidReportDescriptorSize++] = 0x06;
+        // LOGICAL_MAXIMUM (65535)
+        tempHidReportDescriptor[hidReportDescriptorSize++] = 0x27;
+        tempHidReportDescriptor[hidReportDescriptorSize++] = 0xFF;
+        tempHidReportDescriptor[hidReportDescriptorSize++] = 0xFF;
+        tempHidReportDescriptor[hidReportDescriptorSize++] = 0x00;
+        tempHidReportDescriptor[hidReportDescriptorSize++] = 0x00;
 
         // REPORT_SIZE (8)
         tempHidReportDescriptor[hidReportDescriptorSize++] = 0x75;
-        tempHidReportDescriptor[hidReportDescriptorSize++] = 0x08;
+        tempHidReportDescriptor[hidReportDescriptorSize++] = 0x10;
 
-        // REPORT_COUNT (1)
+        // REPORT_COUNT (2)
         tempHidReportDescriptor[hidReportDescriptorSize++] = 0x95;
-        tempHidReportDescriptor[hidReportDescriptorSize++] = 0x01;
+        tempHidReportDescriptor[hidReportDescriptorSize++] = 0x02;
 
         // OUTPUT (Data)
         tempHidReportDescriptor[hidReportDescriptorSize++] = 0x91;
         tempHidReportDescriptor[hidReportDescriptorSize++] = 0x02;
-
-        // END_COLLECTION (PID Device Control)
-        tempHidReportDescriptor[hidReportDescriptorSize++] = 0xC0;
-
-        // END_COLLECTION (PID Device Control Report)
-        tempHidReportDescriptor[hidReportDescriptorSize++] = 0xC0;
     }
 
     // END_COLLECTION (Application)
@@ -1434,11 +1395,6 @@ void BleGamepad::setBatteryLevel(uint8_t level)
     }
 }
 
-void BleGamepad::setRumbleCallBack(void (*func)(RumbleData*))
-{
-    outputCallBack->func = func;
-}
-
 void BleGamepad::taskServer(void *pvParameter)
 {
     BleGamepad *BleGamepadInstance = (BleGamepad *)pvParameter; // static_cast<BleGamepad *>(pvParameter);
@@ -1461,6 +1417,10 @@ void BleGamepad::taskServer(void *pvParameter)
     BleGamepadInstance->connectionStatus->outputGamepad = BleGamepadInstance->outputGamepad;
 
     BleGamepadInstance->outputCallBack = new BleGamepadOutput();
+    if (BleGamepadInstance->configuration.getRumbleCallBack() != NULL)
+    {
+        BleGamepadInstance->outputCallBack->func = BleGamepadInstance->configuration.getRumbleCallBack();
+    }
     BleGamepadInstance->outputGamepad->setCallbacks(BleGamepadInstance->outputCallBack);
 
     BleGamepadInstance->hid->manufacturer()->setValue(BleGamepadInstance->deviceManufacturer);

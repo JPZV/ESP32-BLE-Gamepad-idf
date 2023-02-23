@@ -9,14 +9,15 @@
 // key report back
 typedef struct
 {
-    uint8_t data;
+    uint16_t left_rumble;
+    uint16_t right_rumble;
 } RumbleData;
-using callBackFunc = void (*)(RumbleData*);
+using RumbleCallBackFunc = void (*)(RumbleData*);
 
 class BleGamepadOutput : public NimBLECharacteristicCallbacks
 {
 public:
-    callBackFunc func = [](RumbleData*){ };
+    RumbleCallBackFunc func = [](RumbleData*){ };
     BleGamepadOutput(void);
     void onWrite(NimBLECharacteristic* pCharacteristic, NimBLEConnInfo& connInfo);
 };

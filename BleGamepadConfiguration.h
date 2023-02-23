@@ -6,6 +6,7 @@
 #define POSSIBLESIMULATIONCONTROLS 5
 
 #include "esp_system.h"
+#include "BleGamepadOutput.h"
 
 #define CONTROLLER_TYPE_JOYSTICK 0x04
 #define CONTROLLER_TYPE_GAMEPAD 0x05
@@ -222,6 +223,7 @@ private:
     char *_firmwareRevision;
     char *_hardwareRevision;
     bool _hasRumble;
+    RumbleCallBackFunc _rumbleCallBack;
 
 public:
     BleGamepadConfiguration();
@@ -272,6 +274,7 @@ public:
     char *getFirmwareRevision();
     char *getHardwareRevision();
     bool getHasRumble();
+    RumbleCallBackFunc getRumbleCallBack();
 
     void setControllerType(uint8_t controllerType);
     void setAutoReport(bool value);
@@ -314,6 +317,7 @@ public:
     void setFirmwareRevision(char *value);
     void setHardwareRevision(char *value);
     void setHasRumble(bool value);
+    void setRumbleCallBack(void (*func)(RumbleData*));
 };
 
 #endif
