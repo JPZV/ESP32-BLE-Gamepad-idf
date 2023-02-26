@@ -28,7 +28,7 @@ static const char *LOG_TAG = "BLEGamepad";
 #define CHARACTERISTIC_UUID_HARDWARE_REVISION  "2A27"      // Characteristic - Hardware Revision String - 0x2A27
 
 
-uint8_t tempHidReportDescriptor[211];
+uint8_t tempHidReportDescriptor[210];
 int hidReportDescriptorSize = 0;
 uint8_t reportSize = 0;
 uint8_t numOfButtonBytes = 0;
@@ -567,6 +567,11 @@ void BleGamepad::begin(BleGamepadConfiguration *config)
 
         // END_COLLECTION (Physical)
         tempHidReportDescriptor[hidReportDescriptorSize++] = 0xc0;
+
+        // PHYSICAL_MAXIMUM 0
+        tempHidReportDescriptor[hidReportDescriptorSize++] = 0x44;
+        // NO UNIT
+        tempHidReportDescriptor[hidReportDescriptorSize++] = 0x64;
     }
 
     if (configuration.getHasRumble())
@@ -575,7 +580,7 @@ void BleGamepad::begin(BleGamepadConfiguration *config)
         tempHidReportDescriptor[hidReportDescriptorSize++] = 0x05;
         tempHidReportDescriptor[hidReportDescriptorSize++] = 0x0F;
 
-        // REPORT_ID (Default: 11)
+        // REPORT_ID (Default: 4)
         tempHidReportDescriptor[hidReportDescriptorSize++] = 0x85;
         tempHidReportDescriptor[hidReportDescriptorSize++] = configuration.getHidReportId() + 1;
 
