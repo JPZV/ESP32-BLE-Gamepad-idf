@@ -879,6 +879,18 @@ void BleGamepad::release(uint8_t b)
     }
 }
 
+void BleGamepad::setState(uint8_t b, bool s)
+{
+    if (s)
+    {
+        press(b);
+    }
+    else
+    {
+        release(b);
+    }
+}
+
 uint8_t BleGamepad::specialButtonBitPosition(uint8_t b)
 {
     if (b >= POSSIBLESPECIALBUTTONS)
@@ -927,6 +939,18 @@ void BleGamepad::releaseSpecialButton(uint8_t b)
     if (configuration.getAutoReport())
     {
         sendReport();
+    }
+}
+
+void BleGamepad::setStateSpecialButton(uint8_t b, bool s)
+{
+    if (s)
+    {
+        pressSpecialButton(b);
+    }
+    else
+    {
+        releaseSpecialButton(b);
     }
 }
 

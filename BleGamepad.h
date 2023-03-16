@@ -55,8 +55,10 @@ public:
     void setAxes(int16_t x = 0, int16_t y = 0, int16_t z = 0, int16_t rZ = 0, int16_t rX = 0, int16_t rY = 0, int16_t slider1 = 0, int16_t slider2 = 0);
     void press(uint8_t b = BUTTON_1);   // press BUTTON_1 by default
     void release(uint8_t b = BUTTON_1); // release BUTTON_1 by default
+    void setState(uint8_t b = BUTTON_1, bool s = false); // release BUTTON_1 by default
     void pressSpecialButton(uint8_t b);
     void releaseSpecialButton(uint8_t b);
+    void setStateSpecialButton(uint8_t b, bool s = false);
     void pressStart();
     void releaseStart();
     void pressSelect();
