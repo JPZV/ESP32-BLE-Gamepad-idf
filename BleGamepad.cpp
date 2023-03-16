@@ -567,11 +567,6 @@ void BleGamepad::begin(BleGamepadConfiguration *config)
 
         // END_COLLECTION (Physical)
         tempHidReportDescriptor[hidReportDescriptorSize++] = 0xc0;
-
-        // PHYSICAL_MAXIMUM 0
-        tempHidReportDescriptor[hidReportDescriptorSize++] = 0x44;
-        // NO UNIT
-        tempHidReportDescriptor[hidReportDescriptorSize++] = 0x64;
     }
 
     if (configuration.getHasRumble())
